@@ -1,0 +1,21 @@
+{
+  "name": "blockv-cli",
+  "version": "0.0.1",
+  "description": "Command line tools for the BLOCKv system.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "blockv",
+    "vatoms",
+    "cli",
+    "tools"
+  ],
+  "author": "jjv360",
+  "dependencies": {
+    "@blockv/sdk": "^2.2.5",
+    "command-line-args": "^5.0.2",
+    "command-line-usage": "^5.0.5"
+  }
+}
