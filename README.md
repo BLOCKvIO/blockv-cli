@@ -23,3 +23,8 @@ blockv login --user <email> --password <pwd> --dev
 # Fetch details about a vAtom
 blockv read --id <vatom-id>
 ```
+
+``` bash
+# Get help on any command
+blockv <command> --help
+```
