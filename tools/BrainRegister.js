@@ -30,7 +30,7 @@ module.exports = {
                     { name: 'init', typeLabel: '{italic Drop}', description: '{italic (required)} Must be "Drop". Specifies the trigger which activates the brain for a vAtom.'},
                     { name: 'shutdown', typeLabel: '{italic Pickup}', description: '{italic (required)} Must be "Pickup". Specifies the trigger which deactivates the brain for a vAtom.'},
                     { name: 'max-runtime', typeLabel: '{italic ms}', description: '{italic Default = 2000.} The amount of time the brain is allowed to run per event.'},
-                    { name: 'wake-interval', typeLabel: '{italic ms}', description: '{italic Default = 100.} The time between each wakeup event.'},
+                    { name: 'wake-interval', typeLabel: '{italic ms}', description: '{italic Default = 10000.} The time between each wakeup event.'},
                 ]
             }
 
@@ -47,17 +47,17 @@ module.exports = {
         let info = []
 
         // Register brain
-        let out = await BLOCKv.client.request('POST', '/v1/brains', {
+        await BLOCKv.client.request('POST', '/v1/brains', {
             template_variation: opts.variation,
             package_main: "main.js",
             init_trigger: opts.init,
             shutdown_trigger: opts.shutdown,
             max_runtime: parseInt(opts.max_runtime) || 2000,
-            wake_call_interval: parseInt(opts.wake_interval) || 100
+            wake_call_interval: parseInt(opts.wake_interval) || 10000
         })
 
         // Done
-        console.log(out)
+        console.log('Done.')
 
     }
 }
