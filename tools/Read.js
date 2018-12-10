@@ -1,17 +1,51 @@
 
 const commandLineUsage = require('command-line-usage')
-const BLOCKv = require('../utils/BLOCKv')
+const Config = require('../utils/Config')
 
 module.exports = {
     id: 'read',
     description: 'Fetches information about a vatom ID, template variation, template, etc.',
-    requiresSession: true,
     args: [
         { name: 'id' },
         { name: 'variation' },
-        { name: 'template' }
+        { name: 'template' },
+        { name: 'help', type: Boolean }
     ],
     run: async opts => {
+
+        // Show help if needed
+        if (opts.help) return console.log(commandLineUsage([
+            {
+                header: `Read tool`,
+                content: `Reads information from a vatom ID, template variation, or template.`
+            },
+            {
+                header: `Options`,
+                optionList: [
+                    {
+                        name: 'id',
+                        typeLabel: '{underline Vatom-ID}',
+                        description: `A vAtom ID to read from`
+                    },
+                    {
+                        name: 'variation',
+                        typeLabel: '{underline Templ-Variation-ID}',
+                        description: `A template variation ID to read from. Not necessary if specifying --id.`
+                    },
+                    {
+                        name: 'template',
+                        typeLabel: '{underline Template-ID}',
+                        description: `A template to read from. Not necessary if specifying --id or --variation.`
+                    }
+                ]
+            }
+        ]))
+
+        // Check required fields
+        if (!opts.id && !opts.variation && !opts.template) return console.log('Please specify one of --id, --variation, or --template')
+
+        // Get logged in session
+        const BLOCKv = await Config.loadSession()
 
         // Create output table
         let info = []
@@ -97,8 +131,15 @@ module.exports = {
             try {
                 data = await BLOCKv.client.request('GET', '/v1/brains/' + opts.variation, null, true)
                 info.push({
-                    header: 'Variation: Resources',
-                    content: JSON.stringify(data).replace(/{/g, "\\{").replace(/}/g, "\\}")
+                    header: 'Variation: Brain',
+                    content: [
+                        { a: 'Code Path', b: data.code_path || '(none)' },
+                        { a: 'Package Main', b: data.package_main || '(none)' },
+                        { a: 'Init Trigger', b: data.init_trigger || '(none)' },
+                        { a: 'Shutdown Trigger', b: data.shutdown_trigger || '(none)' },
+                        { a: 'Max Runtime', b: (data.max_runtime + '') || '(none)' },
+                        { a: 'Wake Call Interval', b: (data.wake_call_interval + '') || '(none)' }
+                    ]
                 })
             } catch (err) {
 
@@ -113,35 +154,7 @@ module.exports = {
         }
 
         // Display info if any
-        if (info.length != 0) console.log(commandLineUsage(info))
-
-        // If nothing in the info, output help
-        if (info.length == 0) console.log(commandLineUsage([
-            {
-                header: `Read tool`,
-                content: `Reads information from a vatom ID, template variation, or template.`
-            },
-            {
-                header: `Options`,
-                optionList: [
-                    {
-                        name: 'id',
-                        typeLabel: '{underline Vatom-ID}',
-                        description: `A vAtom ID to read from`
-                    },
-                    {
-                        name: 'variation',
-                        typeLabel: '{underline Templ-Variation-ID}',
-                        description: `A template variation ID to read from. Not necessary if specifying --id.`
-                    },
-                    {
-                        name: 'template',
-                        typeLabel: '{underline Template-ID}',
-                        description: `A template to read from. Not necessary if specifying --id or --variation.`
-                    }
-                ]
-            }
-        ]))
+        console.log(commandLineUsage(info))
 
     }
 }

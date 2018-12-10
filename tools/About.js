@@ -6,7 +6,7 @@ module.exports = {
     id: 'about',
     description: 'Displays general information and a list of all tools.',
     args: [],
-    run: e => {
+    run: opts => {
 
         // Create help menu
         let menu = []

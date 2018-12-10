@@ -4,9 +4,11 @@
 // - description: A short description to show on the tool list screen
 // - args: An array to pass to command-line-args
 // - run: a function which receives the options passed in via cli and executes the tool
-// - requiresSession: True if you want a logged in session when run() is called
 
 module.exports = {
     "about": require('./About'),
-    "read": require('./Read')
+    "read": require('./Read'),
+    "brain-register": require('./BrainRegister'),
+    "brain-shutdown": require('./BrainShutdown'),
+    "login": require('./Login')
 }
