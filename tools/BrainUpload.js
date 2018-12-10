@@ -80,6 +80,30 @@ module.exports = {
             }, [
                 "."
             ])
+
+            // Done
+            npmPackagePath = path.join(outFolder, "brain.tgz")
+
+        } else if (fs.existsSync(path.join(opts.path, "package.json"))) {
+
+            // Already in the required format!
+            console.log('Path is a npm package folder')
+
+            // Package it. Create temp folder
+            console.log('Packaging brain code...')
+            let outFolder = tmp.dirSync().name
+
+            // Pack archive
+            await tar.create({
+                gzip: true,
+                file: path.join(outFolder, "brain.tgz"),
+                prefix: "package/",
+                filter: p => p.indexOf("node_modules") == -1,
+                cwd: opts.path
+            }, [
+                "."
+            ])
+
             // Done
             npmPackagePath = path.join(outFolder, "brain.tgz")
 
@@ -99,7 +123,7 @@ module.exports = {
 
         // Submit form
         console.log('Uploading packaged brain from ' + npmPackagePath)
-        await BLOCKv.client.request('POST', '/v1/brains/' + opts.variation, data, true)
+        // await BLOCKv.client.request('POST', '/v1/brains/' + opts.variation, data, true)
 
         // Done
         console.log('Done.')
