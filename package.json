@@ -1,6 +1,6 @@
 {
   "name": "blockv-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Command line tools for the BLOCKv system.",
   "main": "index.js",
   "scripts": {
@@ -14,9 +14,13 @@
   ],
   "author": "jjv360",
   "dependencies": {
-    "@blockv/sdk": "^2.2.5",
+    "@blockv/sdk": "github:BLOCKvIO/web-sdk",
     "command-line-args": "^5.0.2",
     "command-line-usage": "^5.0.5",
+    "form-data": "^2.3.3",
+    "node-fetch": "^2.3.0",
+    "tar": "^4.4.8",
+    "tmp": "0.0.33",
     "user-settings": "^0.2.0"
   }
 }

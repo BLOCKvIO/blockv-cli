@@ -31,6 +31,7 @@ module.exports.loadSession = async function() {
 
     // Make sure it's valid
     try {
+        console.log('Checking session...')
         await bv.UserManager.getCurrentUser()
     } catch (err) {
         throw new Error('Please login first.')

@@ -14,17 +14,27 @@ blockv
 ```
 
 ``` bash
+# Get help on any command
+blockv <command> --help
+```
+
+``` bash
 # Log in to prod or dev. Must be called first before any other commands to set up a session.
 blockv login --user <email> --password <pwd>
 blockv login --user <email> --password <pwd> --dev
 ```
 
 ``` bash
-# Fetch details about a vAtom
+# Fetch details about a vAtom, a variation, or a template
 blockv read --id <vatom-id>
+blockv read --variation <id>
+blockv read --template <id>
 ```
 
 ``` bash
-# Get help on any command
-blockv <command> --help
+# Brain commands
+blockv read --variation <id>
+blockv brain-register --variation <id> --init Drop --shutdown Pickup
+blockv brain-upload --variation <id> --path /path/to/my_brain.js
+blockv brain-shutdown --variation <id>
 ```

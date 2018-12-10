@@ -37,6 +37,7 @@ module.exports = {
         ]))
 
         // Check required fields
+        if (!opts.variation) return console.log('Please specify --variation')
         if (!opts.init || !opts.shutdown) return console.log('Please specify --init and --shutdown')
 
         // Get logged in session

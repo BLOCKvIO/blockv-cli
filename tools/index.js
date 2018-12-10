@@ -10,5 +10,6 @@ module.exports = {
     "read": require('./Read'),
     "brain-register": require('./BrainRegister'),
     "brain-shutdown": require('./BrainShutdown'),
+    "brain-upload": require('./BrainUpload'),
     "login": require('./Login')
 }
