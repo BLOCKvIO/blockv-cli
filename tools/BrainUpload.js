@@ -123,7 +123,7 @@ module.exports = {
 
         // Submit form
         console.log('Uploading packaged brain from ' + npmPackagePath)
-        // await BLOCKv.client.request('POST', '/v1/brains/' + opts.variation, data, true)
+        await BLOCKv.client.request('POST', '/v1/brains/' + opts.variation, data, true)
 
         // Done
         console.log('Done.')
