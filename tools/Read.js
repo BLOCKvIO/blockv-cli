@@ -66,7 +66,9 @@ module.exports = {
                     { a: 'ID', b: data.vatoms[0].id },
                     { a: 'Created Date', b: data.vatoms[0].when_created },
                     { a: 'Modified Date', b: data.vatoms[0].when_modified },
-                    { a: 'Visibility', b: data.vatoms[0]['vAtom::vAtomType'].visibility.type }
+                    { a: 'Visibility', b: data.vatoms[0]['vAtom::vAtomType'].visibility.type },
+                    { a: 'Template ID', b: data.vatoms[0]['vAtom::vAtomType'].template },
+                    { a: 'Variation ID', b: data.vatoms[0]['vAtom::vAtomType'].template_variation }
                 ]
             })
 
@@ -94,42 +96,51 @@ module.exports = {
         // Check if we have a variation
         if (opts.variation) {
 
-            // Load variation info
-            console.log('Fetching variation info...')
-            let data = await BLOCKv.client.request('GET', '/v1/template_variations/' + opts.variation, null, true)
+            try {
 
-            // Display general info
-            info.push({
-                header: 'Variation: General',
-                content: [
-                    { a: 'Variation ID', b: opts.variation },
-                    { a: 'Title', b: data.properties.template_variation['vAtom::vAtomType'].title },
-                    { a: 'Description', b: data.properties.template_variation['vAtom::vAtomType'].description },
-                    { a: 'Category', b: data.properties.template_variation['vAtom::vAtomType'].category || '(none)' },
-                    { a: 'Unpublished', b: data.properties.template_variation.unpublished ? 'true' : 'false' },
-                ]
-            })
+                // Load variation info
+                console.log('Fetching variation info...')
+                let data = await BLOCKv.client.request('GET', '/v1/template_variations/' + opts.variation, null, true)
 
-            // Display resources
-            info.push({
-                header: 'Variation: Resources',
-                content: []
-            })
+                // Display general info
+                info.push({
+                    header: 'Variation: General',
+                    content: [
+                        { a: 'Variation ID', b: opts.variation },
+                        { a: 'Title', b: data.properties.template_variation['vAtom::vAtomType'].title },
+                        { a: 'Description', b: data.properties.template_variation['vAtom::vAtomType'].description },
+                        { a: 'Category', b: data.properties.template_variation['vAtom::vAtomType'].category || '(none)' },
+                        { a: 'Unpublished', b: data.properties.template_variation.unpublished ? 'true' : 'false' },
+                    ]
+                })
 
-            for (let res of data.properties.template_variation['vAtom::vAtomType'].resources) info[info.length-1].content.push({
-                a: res.name, b: res.resourceType, c: res.value.value
-            })
+                // Display resources
+                info.push({
+                    header: 'Variation: Resources',
+                    content: []
+                })
 
-            // Display other sections
-            for (let section of Object.keys(data.properties.template_variation)) if (typeof data.properties.template_variation[section] == 'object' && section != 'vAtom::vAtomType') info.push({
-                header: 'Variation: ' + section,
-                content: JSON.stringify(data.properties.template_variation[section] || {}).replace(/{/g, "\\{").replace(/}/g, "\\}")
-            })
+                for (let res of data.properties.template_variation['vAtom::vAtomType'].resources) info[info.length-1].content.push({
+                    a: res.name, b: res.resourceType, c: res.value.value
+                })
+
+                // Display other sections
+                for (let section of Object.keys(data.properties.template_variation)) if (typeof data.properties.template_variation[section] == 'object' && section != 'vAtom::vAtomType') info.push({
+                    header: 'Variation: ' + section,
+                    content: JSON.stringify(data.properties.template_variation[section] || {}).replace(/{/g, "\\{").replace(/}/g, "\\}")
+                })
+
+            } catch (err) {
+
+                // Error
+                console.warn('Unable to get variation info: ' + err.message)
+                
+            }
 
             // Fetch brain info
             console.log('Fetching brain info...')
             try {
-                data = await BLOCKv.client.request('GET', '/v1/brains/' + opts.variation, null, true)
+                let data = await BLOCKv.client.request('GET', '/v1/brains/' + opts.variation, null, true)
                 info.push({
                     header: 'Variation: Brain',
                     content: [
