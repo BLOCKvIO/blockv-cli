@@ -13,6 +13,7 @@
     "tools"
   ],
   "author": "jjv360",
+  "bin": { "blockv": "./cli.js" },
   "dependencies": {
     "@blockv/sdk": "github:BLOCKvIO/web-sdk",
     "command-line-args": "^5.0.2",

@@ -68,7 +68,11 @@ module.exports = {
                     { a: 'Modified Date', b: data.vatoms[0].when_modified },
                     { a: 'Visibility', b: data.vatoms[0]['vAtom::vAtomType'].visibility.type },
                     { a: 'Template ID', b: data.vatoms[0]['vAtom::vAtomType'].template },
-                    { a: 'Variation ID', b: data.vatoms[0]['vAtom::vAtomType'].template_variation }
+                    { a: 'Variation ID', b: data.vatoms[0]['vAtom::vAtomType'].template_variation },
+                    { a: 'Title', b: data.vatoms[0]['vAtom::vAtomType'].title },
+                    { a: 'Description', b: data.vatoms[0]['vAtom::vAtomType'].description },
+                    { a: 'Category', b: data.vatoms[0]['vAtom::vAtomType'].category || '(none)' },
+                    { a: 'Unpublished', b: data.vatoms[0].unpublished ? 'true' : 'false' },
                 ]
             })
 
@@ -85,6 +89,48 @@ module.exports = {
                     { a: 'Author', b: `${data.vatoms[0]['vAtom::vAtomType'].author} (${authorInfo.properties.first_name} ${authorInfo.properties.last_name})` },
                     { a: 'Publisher FQDN', b: data.vatoms[0]['vAtom::vAtomType'].publisher_fqdn }
                 ]
+            })
+
+            // Display resources
+            info.push({
+                header: 'Vatom: Resources',
+                content: []
+            })
+
+            for (let res of data.vatoms[0]['vAtom::vAtomType'].resources) info[info.length-1].content.push({
+                a: res.name, b: res.resourceType, c: res.value.value
+            })
+
+            // Display actions
+            info.push({
+                header: 'Vatom: Actions',
+                content: []
+            })
+
+            for (let action of data.actions) info[info.length-1].content.push({
+                a: action.name
+            })
+            if (data.actions.length == 0) info[info.length-1].content.push({
+                a: "(none)"
+            })
+
+            // Display faces
+            info.push({
+                header: 'Vatom: Faces',
+                content: []
+            })
+
+            for (let face of data.faces) info[info.length-1].content.push({
+                a: face.properties.constraints.view_mode, b: face.properties.constraints.platform, c: face.properties.display_url
+            })
+            if (data.faces.length == 0) info[info.length-1].content.push({
+                a: "(none)"
+            })
+
+            // Display other sections
+            for (let section of Object.keys(data.vatoms[0])) if (typeof data.vatoms[0][section] == 'object' && section != 'vAtom::vAtomType') info.push({
+                header: 'Vatom: ' + section,
+                content: JSON.stringify(data.vatoms[0][section] || {}).replace(/{/g, "\\{").replace(/}/g, "\\}")
             })
 
             // Set variation if needed
@@ -157,7 +203,7 @@ module.exports = {
                 // No brain info
                 info.push({
                     header: 'Variation: Brain',
-                    content: "(none)"
+                    content: err.message
                 })
 
             }
