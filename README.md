@@ -2,9 +2,7 @@
 
 This provides a set of CLI tools for publishing and interacting with vAtoms on the BLOCKv platform.
 
-To install, run `npm i -g blockv-cli`. This will install a `blockv` CLI tool into your PATH.
-
-> We have not published to npm yet, so the above command won't work. Instead, clone this repo, run `npm install`, and then `node cli ...` instead of `blockv ...` when running commands.
+To install, clone this repo and then run `npm install . -g`
 
 ## Examples
 
@@ -33,7 +31,6 @@ blockv read --template <id>
 
 ``` bash
 # Brain commands
-blockv read --variation <id>
 blockv brain-register --variation <id> --init Drop --shutdown Pickup
 blockv brain-upload --variation <id> --path /path/to/my_brain.js
 blockv brain-shutdown --variation <id>
