@@ -51,7 +51,7 @@ module.exports = {
         console.log('Emitting vatoms...')
         let data = await BLOCKv.client.request('POST', '/v1/vatoms', {
             template_variation: opts.variation,
-            num: opts.count
+            num: opts.count || 1
         }, true)
 
         // Send if needed
