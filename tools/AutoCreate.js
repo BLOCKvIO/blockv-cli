@@ -24,7 +24,7 @@ let resources = [
 let faces = [
     { id: Math.random().toString(16).substring(2), view_mode: 'icon', url: 'native://image' }
 ]
-let published = false
+let draft = true
 let constructedTemplateVariation = null
 
 // Enabled actions
@@ -62,6 +62,7 @@ module.exports = {
             // Ask what to do
             let action = await askList("What do you want to do?", [
                 { value: 'edit', name: "Edit properties directly" },
+                { value: 'toggle-draft', name: draft ? "Set as published (will cost VEE)" : "Set as draft (unpublished)" },
                 new inquirer.Separator(),
                 { value: 'emit', name: "Generate vAtom" },
                 { value: 'cancel', name: "Cancel without creating a vAtom" }
@@ -70,6 +71,8 @@ module.exports = {
             // Check what to do
             if (action == 'edit')
                 await editMenu()
+            if (action == 'toggle-draft')
+                draft = !draft
             else if (action == 'emit')
                 await emitVatom()
             else if (action == 'cancel')
@@ -105,7 +108,7 @@ function printVatomInfo() {
                 { a: 'Description:', b: `{blue ${description}}` },
                 { a: 'Category:', b: `{blue ${category}}` },
                 { a: 'Actions: ', b: actionNames.join(', ')},
-                { a: 'Published: ', b: published ? 'Yes' : 'No'}
+                { a: 'Draft: ', b: draft ? '{blue Yes (unpublished)}' : '{yellow No (will cost VEE)}'}
             ]
         }
     ]
@@ -532,7 +535,7 @@ async function emitVatom() {
         eth.fields[f.key] = { type: 'string', value: f.value }
 
     // Create eos section
-    let eos = { network: 'mainnet', fields: {} }
+    let eos = { network: 'veos-test', fields: {} }
     for (let f of eosData)
         eos.fields[f.key] = { type: 'string', value: f.value }
 
@@ -544,7 +547,7 @@ async function emitVatom() {
             "template": `${userInfo.pubFqdn}::${templateName}`,
             "public": true,
             "cloneable": false,
-            "unpublished": true,
+            "unpublished": draft,
             "vatom": {
                 "vAtom::vAtomType": {
                     "root_type": "vAtom::vAtomType",
@@ -561,10 +564,10 @@ async function emitVatom() {
                         }
                     }))
                 },
-                private,
-                eos: eosData.length == 0 ? undefined : eos,
-                eth: ethData.length == 0 ? undefined : eth
-            }
+                private
+            },
+            eos: eosData.length == 0 ? undefined : eos,
+            eth: ethData.length == 0 ? undefined : eth
         }, true)
 
     }})
@@ -576,13 +579,8 @@ async function emitVatom() {
         await BLOCKv.client.request('POST', '/v1/template_variations', {
             "template": `${userInfo.pubFqdn}::${templateName}`,
             "template_variation": `${userInfo.pubFqdn}::${templateName}::${variationName}`,
-            "unpublished": true,
-            "vatom": {
-                "vAtom::vAtomType": {},
-                private,
-                eos: eosData.length == 0 ? undefined : eos,
-                eth: ethData.length == 0 ? undefined : eth
-            }
+            "unpublished": draft,
+            "vatom": {}
         }, true)
 
     }})

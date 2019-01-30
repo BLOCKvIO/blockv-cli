@@ -1,6 +1,8 @@
 
 const settings = require('user-settings').file('.blockv')
 const Blockv = require('@blockv/sdk')
+const fs = require('fs')
+const os = require('os')
 
 module.exports = {}
 
@@ -37,7 +39,41 @@ module.exports.loadSession = async function() {
         throw new Error('Please login first.')
     }
 
+    // Add log output to request function
+    bv.client.originalRequest = bv.client.request
+    bv.client.request = function(method, endpoint, payload, auth) {
+
+        // Do request
+        return bv.client.originalRequest(method, endpoint, payload, auth).then(out => {
+
+            // Success, log to file
+            module.exports.log(`${method} ${endpoint}\n${JSON.stringify(payload, null, 2)}\n\n${JSON.stringify(out, null, 2)}\n\n\n\n`)
+            return out
+
+        }).catch(err => {
+
+            // Failed, log to file
+            module.exports.log(`${method} ${endpoint}\n${JSON.stringify(payload, null, 2)}\n\nFAILED: ${err.message}\n\n\n\n`)
+            throw err
+
+        })
+
+    }
+
     // Done
     return bv
+
+}
+
+/** Output text to log file */
+module.exports.log = function(text) {
+
+    // Ignore errors
+    try {
+
+        // Append to log file
+        fs.appendFileSync(os.homedir() + '/.blockv.log', text)
+
+    } catch (e) {}
 
 }
