@@ -13,5 +13,6 @@ module.exports = {
     "brain-upload": require('./BrainUpload'),
     "brain-delete": require('./BrainDelete'),
     "login": require('./Login'),
-    "emit": require('./Emit')
+    "emit": require('./Emit'),
+    "autocreate": require('./AutoCreate')
 }

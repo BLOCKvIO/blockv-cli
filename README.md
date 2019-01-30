@@ -35,3 +35,8 @@ blockv brain-register --variation <id> --init Drop --shutdown Pickup
 blockv brain-upload --variation <id> --path /path/to/my_brain.js
 blockv brain-shutdown --variation <id>
 ```
+
+``` bash
+# Text-based vAtom designer
+blockv autocreate
+```
