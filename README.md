@@ -2,7 +2,7 @@
 
 This provides a set of CLI tools for publishing and interacting with vAtoms on the BLOCKv platform.
 
-To install, clone this repo and then run `npm install . -g`
+To install or update, make sure you have [Node](https://nodejs.org) installed and then run `npm install -g github:BLOCKvIO/blockv-cli`
 
 ## Examples
 
