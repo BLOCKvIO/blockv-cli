@@ -53,7 +53,8 @@ module.exports = {
             init_trigger: opts.init,
             shutdown_trigger: opts.shutdown,
             max_runtime: parseInt(opts.max_runtime) || 2000,
-            wake_call_interval: parseInt(opts.wake_interval) || 10000
+            wake_call_interval: parseInt(opts.wake_interval) || 10000,
+            log_level: "info"
         }, true)
 
         // Done
