@@ -72,7 +72,7 @@ module.exports = {
                     { a: 'Title', b: data.vatoms[0]['vAtom::vAtomType'].title },
                     { a: 'Description', b: data.vatoms[0]['vAtom::vAtomType'].description },
                     { a: 'Category', b: data.vatoms[0]['vAtom::vAtomType'].category || '(none)' },
-                    { a: 'Unpublished', b: data.vatoms[0].unpublished ? 'true' : 'false' },
+                    { a: 'Draft', b: data.vatoms[0].unpublished ? '{yellow Yes}' : 'No' },
                 ]
             })
 
@@ -156,7 +156,7 @@ module.exports = {
                         { a: 'Title', b: data.properties.template_variation['vAtom::vAtomType'].title },
                         { a: 'Description', b: data.properties.template_variation['vAtom::vAtomType'].description },
                         { a: 'Category', b: data.properties.template_variation['vAtom::vAtomType'].category || '(none)' },
-                        { a: 'Unpublished', b: data.properties.template_variation.unpublished ? 'true' : 'false' },
+                        { a: 'Draft', b: data.properties.unpublished ? '{yellow Yes}' : 'No' },
                     ]
                 })
 

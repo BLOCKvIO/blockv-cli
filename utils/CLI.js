@@ -18,6 +18,11 @@ module.exports.askListMultiple = async (msg, choices) => {
     return (await inquirer.prompt([{ name: 'value', message: msg, choices, type: 'checkbox' }])).value
 }
 
+/** Ask user to confirm yes or no. @returns Promise<bool> */
+module.exports.confirm = async (msg, defaultChoice = true) => {
+    return (await inquirer.prompt([{ name: 'value', message: msg, type: 'confirm', default: defaultChoice }])).value
+}
+
 // /** Waits for the user to press any key in the console. @returns Promise */
 // module.exports.pressAnyKey = e => {
 

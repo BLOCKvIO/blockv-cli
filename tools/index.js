@@ -14,5 +14,6 @@ module.exports = {
     "brain-delete": require('./BrainDelete'),
     "login": require('./Login'),
     "emit": require('./Emit'),
+    "publish": require('./Publish'),
     "autocreate": require('./AutoCreate')
 }

@@ -30,6 +30,12 @@ blockv read --template <id>
 ```
 
 ``` bash
+# Publish a vatom template
+blockv publish --variation <id>
+blockv publish --template <id>
+```
+
+``` bash
 # Brain commands
 blockv brain-register --variation <id> --init Drop --shutdown Pickup
 blockv brain-upload --variation <id> --path /path/to/my_brain.js
