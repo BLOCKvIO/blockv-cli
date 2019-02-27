@@ -15,5 +15,6 @@ module.exports = {
     "login": require('./Login'),
     "emit": require('./Emit'),
     "publish": require('./Publish'),
+    "balance": require('./Balance'),
     "autocreate": require('./AutoCreate')
 }
