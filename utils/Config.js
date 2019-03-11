@@ -34,7 +34,11 @@ module.exports.loadSession = async function() {
     // Make sure it's valid
     try {
         console.log('Checking session...')
-        await bv.UserManager.getCurrentUser()
+        let user = await bv.UserManager.getCurrentUser()
+
+        // Log user info
+        console.log('Logged into ' + server + ' as ' + (user.firstName || 'No Name'))
+
     } catch (err) {
         throw new Error('Please login first.')
     }

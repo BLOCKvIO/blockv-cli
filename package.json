@@ -1,6 +1,6 @@
 {
   "name": "blockv-cli",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Command line tools for the BLOCKv system.",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,7 @@
     "form-data": "^2.3.3",
     "inquirer": "^6.2.1",
     "node-fetch": "^2.3.0",
+    "opn": "^5.4.0",
     "tar": "^4.4.8",
     "tmp": "0.0.33",
     "user-settings": "^0.2.0"

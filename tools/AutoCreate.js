@@ -32,6 +32,7 @@ let actionTransfer = true
 let actionDrop = true
 let actionPickup = true
 let actionUpdate = false
+let actionAcquirePubVariation = false
 
 module.exports = {
     id: 'autocreate',
@@ -96,6 +97,7 @@ function printVatomInfo() {
     if (actionDrop) actionNames.push('Drop')
     if (actionPickup) actionNames.push('Pickup')
     if (actionUpdate) actionNames.push('Update')
+    if (actionAcquirePubVariation) actionNames.push('AcquirePubVariation')
 
     // Create info table
     let info = [
@@ -391,6 +393,7 @@ async function editResources() {
             if (val.indexOf(".avi") != -1) type = "ResourceType::Video::AVI"
             if (val.indexOf(".v3d") != -1) type = "ResourceType::3D::Scene"
             if (val.indexOf(".glb") != -1) type = "ResourceType::3D::Scene"
+            if (val.indexOf(".fbx") != -1) type = "ResourceType::3D::Scene"
 
             // Ask for type
             type = await ask("Enter resource type:", type)
@@ -502,7 +505,8 @@ async function editActions() {
         { value: 'transfer', name: "Transfer - Allows users to send the vAtom to someone else", selected: actionTransfer },
         { value: 'drop', name: "Drop - Allows users to drop the vAtom publicly on the map", selected: actionDrop },
         { value: 'pickup', name: "Pickup - Allows any user to pick the vAtom up after it's been dropped", selected: actionPickup },
-        { value: 'update', name: "Update - Allows the viewer or a web face to update any private property", selected: actionUpdate }
+        { value: 'update', name: "Update - Allows the viewer or a web face to update any private property", selected: actionUpdate },
+        { value: 'acquire-pub', name: "AcquirePubVariation - Allows users to acquire copies of this vatom", selected: actionAcquirePubVariation }
     ])
 
     // Check what to do
@@ -510,6 +514,7 @@ async function editActions() {
     actionDrop = actionList.includes('drop')
     actionPickup = actionList.includes('pickup')
     actionUpdate = actionList.includes('update')
+    actionAcquirePubVariation = actionList.includes('acquire-pub')
 
 }
 
@@ -546,7 +551,7 @@ async function emitVatom() {
         await BLOCKv.client.request('POST', '/v1/templates', {
             "template": `${userInfo.pubFqdn}::${templateName}`,
             "public": true,
-            "cloneable": false,
+            "cloneable": actionAcquirePubVariation,
             "unpublished": draft,
             "vatom": {
                 "vAtom::vAtomType": {
@@ -554,6 +559,7 @@ async function emitVatom() {
                     "description": description,
                     "title": title,
                     "redeemable": false,
+                    "acquirable": actionAcquirePubVariation,
                     "states": [],
                     "resources": resources.map(r => ({
                         "name": r.name,
@@ -580,6 +586,8 @@ async function emitVatom() {
             "template": `${userInfo.pubFqdn}::${templateName}`,
             "template_variation": `${userInfo.pubFqdn}::${templateName}::${variationName}`,
             "unpublished": draft,
+            "auto_create_on_acquire": actionAcquirePubVariation,
+            "public": true,
             "vatom": {}
         }, true)
 
@@ -643,6 +651,20 @@ async function emitVatom() {
             "reactor": 'blockv://custom/privateproperties',
             "timeout": 10000,
             "wait": true
+        }, true)
+
+    }})
+
+    // Add AcquirePubVariation action
+    if (!constructedTemplateVariation && actionAcquirePubVariation) tasks.push({ name: 'Adding AcquirePubVariation action...', run: async e => {
+
+        // Call API
+        await BLOCKv.client.request('POST', '/v1/publisher/action', {
+            "name": `${userInfo.pubFqdn}::${templateName}::Action::AcquirePubVariation`,
+            "reactor": 'blockv://v1/AcquirePubVariationWithCoins',
+            "timeout": 10000,
+            "wait": true,
+            "guest_user": true
         }, true)
 
     }})

@@ -36,6 +36,11 @@ blockv publish --template <id>
 ```
 
 ``` bash
+# Check your account's VEE balance
+blockv balance
+```
+
+``` bash
 # Brain commands
 blockv brain-register --variation <id> --init Drop --shutdown Pickup
 blockv brain-upload --variation <id> --path /path/to/my_brain.js

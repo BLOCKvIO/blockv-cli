@@ -6,6 +6,7 @@
 // - run: a function which receives the options passed in via cli and executes the tool
 
 module.exports = {
+    "app-create": require('./AppCreate'),
     "about": require('./About'),
     "read": require('./Read'),
     "brain-register": require('./BrainRegister'),
