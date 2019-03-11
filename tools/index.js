@@ -7,6 +7,7 @@
 
 module.exports = {
     "app-create": require('./AppCreate'),
+    "app-modify": require('./AppModify'),
     "about": require('./About'),
     "read": require('./Read'),
     "brain-register": require('./BrainRegister'),

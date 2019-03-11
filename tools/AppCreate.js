@@ -1,11 +1,7 @@
 
 const commandLineUsage = require('command-line-usage')
 const Config = require('../utils/Config')
-const { ask } = require('../utils/CLI')
-const opn = require('opn')
-const chalk = require('chalk')
-const tmp = require('tmp')
-const fs = require('fs')
+const doCaptcha = require('../utils/Captcha')
 
 module.exports = {
     id: 'app-create',
@@ -41,27 +37,12 @@ module.exports = {
         const BLOCKv = await Config.loadSession()
         let userInfo = await BLOCKv.UserManager.getCurrentUser()
 
-        // Fetch captcha
-        console.log('Fetching captcha...')
-        let captcha = await BLOCKv.client.request('GET', '/v1/captcha', null, true)
-
-        // Display captcha ina  simple html file
-        let htmlName = tmp.tmpNameSync({ postfix: '.html' })
-        let html = `<img src='${captcha.image}'/>`
-        fs.writeFileSync(htmlName, html)
-        console.log(chalk.yellow('Opening captcha image in the browser...'))
-        opn(htmlName)
-
-        // Ask user to enter captcha value
-        let captchaValue = await ask("Enter captcha: ")
-        if (!captchaValue)
-            return
+        // Get captcha
+        let captcha = await doCaptcha(BLOCKv)
         
         // Create app
         let info = await BLOCKv.client.request('POST', '/v1/publisher/apps', {
-            "captcha": {
-                "id": captcha.id, "value": captchaValue
-            },
+            "captcha": captcha,
             "name": opts.name,
             "fqdn": userInfo.pubFqdn,
             "needs_signature": false,

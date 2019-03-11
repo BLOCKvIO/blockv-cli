@@ -1,6 +1,6 @@
 {
   "name": "blockv-cli",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Command line tools for the BLOCKv system.",
   "main": "index.js",
   "scripts": {

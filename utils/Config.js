@@ -3,6 +3,7 @@ const settings = require('user-settings').file('.blockv')
 const Blockv = require('@blockv/sdk')
 const fs = require('fs')
 const os = require('os')
+const chalk = require('chalk')
 
 module.exports = {}
 
@@ -37,7 +38,7 @@ module.exports.loadSession = async function() {
         let user = await bv.UserManager.getCurrentUser()
 
         // Log user info
-        console.log('Logged into ' + server + ' as ' + (user.firstName || 'No Name'))
+        console.log(chalk`Logged into {${server == 'https://api.blockv.io' ? 'green' : 'red'} ${server}} as ${user.firstName || 'No Name'}`)
 
     } catch (err) {
         throw new Error('Please login first.')
