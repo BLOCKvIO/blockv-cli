@@ -3,7 +3,7 @@
 
 
 const { ask } = require('../utils/CLI')
-const opn = require('opn')
+const open = require('open')
 const tmp = require('tmp')
 const fs = require('fs')
 const chalk = require('chalk')
@@ -23,7 +23,7 @@ module.exports = async function get(BLOCKv) {
     let html = `<img src='${captcha.image}'/>`
     fs.writeFileSync(htmlName, html)
     console.log(chalk.yellow('Opening captcha image in the browser...'))
-    opn(htmlName)
+    open(htmlName)
 
     // Ask user to enter captcha value
     let captchaValue = await ask("Enter captcha: ")

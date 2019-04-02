@@ -2,7 +2,7 @@
 
 This provides a set of CLI tools for publishing and interacting with vAtoms on the BLOCKv platform.
 
-To install or update, make sure you have [Node](https://nodejs.org) installed and then run `npm install -g github:BLOCKvIO/blockv-cli`
+To install or update, make sure you have [Node](https://nodejs.org) installed and then run `npm install -g @blockv/cli`.
 
 ## Examples
 
@@ -38,6 +38,12 @@ blockv publish --template <id>
 ``` bash
 # Check your account's VEE balance
 blockv balance
+```
+
+``` bash
+# Create or modify an App ID
+blockv app-create --name "My App"
+blockv app-modify --id xxx --redirect "https://myapp.com/oauth"
 ```
 
 ``` bash

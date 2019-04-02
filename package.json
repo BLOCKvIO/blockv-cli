@@ -1,8 +1,8 @@
 {
-  "name": "blockv-cli",
+  "name": "@blockv/cli",
   "version": "0.0.11",
   "description": "Command line tools for the BLOCKv system.",
-  "main": "index.js",
+  "main": "tools/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,8 +16,13 @@
   "bin": {
     "blockv": "./cli.js"
   },
+  "files": [
+    "tools/",
+    "utils/",
+    "cli.js"
+  ],
   "dependencies": {
-    "@blockv/sdk": "github:BLOCKvIO/web-sdk",
+    "@blockv/sdk": "^3.1.0",
     "chalk": "^2.4.2",
     "cli-progress": "^2.1.1",
     "command-line-args": "^5.0.2",
@@ -25,7 +30,7 @@
     "form-data": "^2.3.3",
     "inquirer": "^6.2.1",
     "node-fetch": "^2.3.0",
-    "opn": "^5.4.0",
+    "open": "^6.0.0",
     "tar": "^4.4.8",
     "tmp": "0.0.33",
     "user-settings": "^0.2.0"
