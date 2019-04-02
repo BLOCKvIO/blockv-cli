@@ -1,6 +1,6 @@
 {
   "name": "@blockv/cli",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Command line tools for the BLOCKv system.",
   "main": "tools/index.js",
   "scripts": {
@@ -21,6 +21,10 @@
     "utils/",
     "cli.js"
   ],
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/BLOCKvIO/blockv-cli"
+  },
   "dependencies": {
     "@blockv/sdk": "^3.1.0",
     "chalk": "^2.4.2",
