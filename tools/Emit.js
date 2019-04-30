@@ -59,9 +59,13 @@ module.exports = {
 
             // Go through each vatom
             console.log(`Transferring ${data.ids.length} vatoms...`)
-            for (let id of data.ids)
-                await BLOCKv.Vatoms.performAction(id, 'Transfer', { [opts.to.indexOf('@') == -1 ? 'new.owner.phone_number' : 'new.owner.email']: opts.to })
-
+            for (let id of data.ids) {
+                await BLOCKv.client.request('POST', `/v1/user/vatom/action/Transfer`,  {
+                    "this.id": id,
+                    [opts.to.indexOf('@') == -1 ? 'new.owner.phone_number' : 'new.owner.email']: opts.to 
+                }, true)
+            }
+            
         }
 
     }
