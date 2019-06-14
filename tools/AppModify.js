@@ -2,6 +2,8 @@
 const commandLineUsage = require('command-line-usage')
 const Config = require('../utils/Config')
 const doCaptcha = require('../utils/Captcha')
+const fs = require('fs')
+const path = require('path')
 
 module.exports = {
     id: 'app-modify',
@@ -10,6 +12,7 @@ module.exports = {
         { name: 'id' },
         { name: 'name' },
         { name: 'redirect' },
+        { name: 'fcm' },
         { name: 'help', type: Boolean }
     ],
     run: async opts => {
@@ -37,6 +40,11 @@ module.exports = {
                         name: 'redirect',
                         typeLabel: '{underline URIs}',
                         description: `Set the allowed OAuth redirect URIs. Separate multiple ones with space, ie. --redirect "https://app1.com https://app2.com"`
+                    },
+                    {
+                        name: 'fcm',
+                        typeLabel: '{underline File}',
+                        description: `Sets the Firebase Messaging config for this app ID to the specified JSON file.`
                     }
                 ]
             }
@@ -48,21 +56,41 @@ module.exports = {
         // Get logged in session
         const BLOCKv = await Config.loadSession()
 
-        // Get captcha
-        let captcha = await doCaptcha(BLOCKv)
+        // Check if user wants to update fields
+        if (opts.name || opts.redirect) {
 
-        // Update name if requested
-        let payload = { captcha }
-        if (opts.name)
-            payload['name'] = opts.name
+            // Get captcha
+            let captcha = await doCaptcha(BLOCKv)
 
-        // Update redirect URIs if requested
-        if (opts.redirect)
-            payload['redirect_uris'] = opts.redirect.split(' ')
+            // Update name if requested
+            let payload = { captcha }
+            if (opts.name)
+                payload['name'] = opts.name
 
-        // Do it
-        console.log('Updating app...')
-        await BLOCKv.client.request('PATCH', '/v1/publisher/apps/' + opts.id, payload, true)
+            // Update redirect URIs if requested
+            if (opts.redirect)
+                payload['redirect_uris'] = opts.redirect.split(' ')
+
+            // Do it
+            console.log('Updating app...')
+            await BLOCKv.client.request('PATCH', '/v1/publisher/apps/' + opts.id, payload, true)
+
+        }
+
+        // Update firebase key if needed
+        if (opts.fcm) {
+
+            // Read file
+            let txt = fs.readFileSync(path.resolve(opts.fcm), 'utf8')
+
+            // Send to backend
+            console.log('Updating Firebase Messaging public key...')
+            await BLOCKv.client.request('POST', '/v1/user/pushnotification/credentials', {
+                app_id: opts.id,
+                credentials: txt
+            })
+
+        }
 
         // Done
         console.log('Done')
