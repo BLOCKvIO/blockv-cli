@@ -13,6 +13,7 @@ module.exports = {
         { name: 'name' },
         { name: 'redirect' },
         { name: 'fcm' },
+        { name: 'clear-secret', type: Boolean },
         { name: 'help', type: Boolean }
     ],
     run: async opts => {
@@ -45,6 +46,11 @@ module.exports = {
                         name: 'fcm',
                         typeLabel: '{underline File}',
                         description: `Sets the Firebase Messaging config for this app ID to the specified JSON file.`
+                    },
+                    {
+                        name: 'clear-secret',
+                        typeLabel: '',
+                        description: `Removes the client_secret from an app ID. This cannot be undone.`
                     }
                 ]
             }
@@ -89,6 +95,20 @@ module.exports = {
                 app_id: opts.id,
                 credentials: txt
             })
+
+        }
+
+        // Clear secret if needed
+        if (opts['clear-secret']) {
+
+            // Get captcha
+            let payload = {
+                captcha: await doCaptcha(BLOCKv)
+            }
+
+            // Do it
+            console.log('Removing client secret...')
+            await BLOCKv.client.request('PUT', '/v1/publisher/apps/' + opts.id + '/client_secret/clear', payload, true)
 
         }
 
