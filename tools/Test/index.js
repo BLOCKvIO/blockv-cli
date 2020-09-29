@@ -26,8 +26,8 @@ module.exports = {
                 content: `Allows you to run tests against the backend system.
 
 Usage:  {underline blockv test --name <test-name>}
-Example: blockv test --name ws
-Example: blockv test --name ws.map,login.email`
+Example: blockv test --name websocket
+Example: blockv test --name websocket.map,login.email`
             },
             {
                 header: `Options`,
@@ -38,9 +38,9 @@ Example: blockv test --name ws.map,login.email`
                         description: `The name of a test to run. You can supply a single test, a prefix, or a comma separated list.`
                     },
                     {
-                        name: 'name',
-                        typeLabel: '{underline TestName}',
-                        description: `The name of a test to run. You can supply a single test, a prefix, or a comma separated list.`
+                        name: 'tduration',
+                        typeLabel: '{underline Seconds}',
+                        description: `Duration param passed to the test.`
                     },
                     {
                         name: 'repeat',
